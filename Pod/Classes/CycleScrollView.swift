@@ -36,7 +36,7 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
     //设置pageControl对齐方式(默认居中)
     public var pageControlMode:UIPageControlMode = .Center
     
-    public var delegate: CircleViewDelegate!
+    public var delegate: CycleScrollViewDelegate!
     
     //MARK:初始化
     override init(frame: CGRect) {
