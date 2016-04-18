@@ -162,7 +162,7 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
         contentScrollView.addSubview(currentImageView)
         
         //添加点击事件
-        let imageTap = UITapGestureRecognizer(target: self, action: "imageTapAction:")
+        let imageTap = UITapGestureRecognizer(target: self, action: #selector(self.imageTapAction(_:)))
         currentImageView.userInteractionEnabled = true
         currentImageView.addGestureRecognizer(imageTap)
         
@@ -201,7 +201,7 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
         
         //设置定时器
         if imageArray.count > 1{
-            timer = NSTimer.scheduledTimerWithTimeInterval(TimeInterval, target: self, selector: "timerAction", userInfo: nil, repeats: true)
+            timer = NSTimer.scheduledTimerWithTimeInterval(TimeInterval, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
         }
     }
     
@@ -235,7 +235,7 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
     
     //添加定时器
     public func addTimer(){
-        timer = NSTimer.scheduledTimerWithTimeInterval(TimeInterval, target: self, selector: "timerAction", userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(TimeInterval, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
         NSRunLoop.currentRunLoop().addTimer(timer, forMode: NSRunLoopCommonModes)
     }
     

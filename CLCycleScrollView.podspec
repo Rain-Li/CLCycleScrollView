@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "CLCycleScrollView"
-  s.version          = "0.0.4"
+  s.version          = "0.0.5"
   s.summary          = "自定义轮播图效果"
 
 # This description is used to generate tags and improve search results.
