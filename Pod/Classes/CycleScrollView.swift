@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AFImageHelper
 
 public enum UIPageControlMode : Int {
     case Left
@@ -38,17 +39,31 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
     
     public var delegate: CycleScrollViewDelegate!
     
+    var isShowPlaceholder: Bool = false
+    
+    var imageCount: Int = 0
+    
     //MARK:初始化
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
-    convenience public init(frame: CGRect, imageArray: [UIImage!]!){
+    convenience public init(frame: CGRect, imageArray: [String], placeholder: UIImage?){
         self.init(frame: frame)
-        //获取图片数组
-        self.imageArray = imageArray
-        //默认显示第一张图片
-        indexOfCurrentImage = 0;
+        if imageArray.count > 0 {
+            //获取图片数组
+            self.imageArray = imageArray
+            imageCount = imageArray.count
+            isShowPlaceholder = false
+            //默认显示第一张图片
+            indexOfCurrentImage = 0;
+        }else if placeholder != nil{
+            self.placeholder = placeholder
+            imageCount = 0
+            isShowPlaceholder = true
+        }else{
+            isShowPlaceholder = false
+        }
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -86,7 +101,7 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
     //MARK:设置属性
     
     //设置数组
-    var imageArray:[UIImage!]!{
+    var imageArray:[String]!{
         //监听图片数组的变化，如果有变化立即刷新轮播图中显示的图片
         willSet(newValue){
             self.imageArray = newValue
@@ -94,16 +109,16 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
         didSet{
             switch(pageControlMode){
             case .Left:
-                pageControl.frame = CGRectMake(10, contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageArray.count), 20)
+                pageControl.frame = CGRectMake(10, contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageCount), 20)
             case .Center:
-                pageControl.frame = CGRectMake((screen_width - 20 * CGFloat(imageArray.count)) / 2, contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageArray.count), 20)
+                pageControl.frame = CGRectMake((screen_width - 20 * CGFloat(imageCount)) / 2, contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageCount), 20)
             case .Right:
-                pageControl.frame = CGRectMake(screen_width - 10 - 20 * CGFloat(imageArray.count), contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageArray.count), 20)
+                pageControl.frame = CGRectMake(screen_width - 10 - 20 * CGFloat(imageCount), contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageCount), 20)
             }
-            contentScrollView.scrollEnabled = imageArray.count > 1
-            pageControl.numberOfPages = imageArray.count
+            contentScrollView.scrollEnabled = imageCount > 1
+            pageControl.numberOfPages = imageCount
             //设置定时器
-            if imageArray.count <= 1{
+            if imageCount <= 1{
                 removeTimer()
             }
         }
@@ -130,6 +145,13 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
         }
     }
     
+    //默认图片
+    private var placeholder: UIImage?{
+        willSet(newValue){
+            self.placeholder = newValue
+        }
+    }
+    
     //设置定时器的时间间隔
     public var TimeInterval: Double = 3.0{
         willSet(newValue){
@@ -141,14 +163,15 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
     
     //构造scrollView
     public func setUpCircleView(){
-        if imageArray == nil{
+        if isShowPlaceholder == false && imageCount <= 0 {
             return
         }
+        
         //创建scrollView
         //初始化scrollView
         contentScrollView = UIScrollView(frame: CGRectMake(0, 0, screen_width, self.frame.size.height))
         contentScrollView.contentSize = CGSizeMake(screen_width * 3, 0)
-        contentScrollView.scrollEnabled = imageArray.count > 1
+        contentScrollView.scrollEnabled = imageCount > 1
         contentScrollView.delegate = self
         contentScrollView.bounces = false
         contentScrollView.pagingEnabled = true
@@ -186,13 +209,13 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
         pageControl = UIPageControl()
         switch(pageControlMode){
         case .Left:
-            pageControl = UIPageControl(frame: CGRectMake(10, contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageArray.count), 20))
+            pageControl = UIPageControl(frame: CGRectMake(10, contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageCount), 20))
         case .Center:
-            pageControl = UIPageControl(frame: CGRectMake((screen_width - 20 * CGFloat(imageArray.count)) / 2, contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageArray.count), 20))
+            pageControl = UIPageControl(frame: CGRectMake((screen_width - 20 * CGFloat(imageCount)) / 2, contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageCount), 20))
         case .Right:
-            pageControl = UIPageControl(frame: CGRectMake(screen_width - 10 - 20 * CGFloat(imageArray.count), contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageArray.count), 20))
+            pageControl = UIPageControl(frame: CGRectMake(screen_width - 10 - 20 * CGFloat(imageCount), contentScrollView.frame.origin.y + contentScrollView.frame.size.height - 30, 20 * CGFloat(imageCount), 20))
         }
-        pageControl.numberOfPages = imageArray.count;
+        pageControl.numberOfPages = imageCount;
         pageControl.hidesForSinglePage = true
         pageControl.pageIndicatorTintColor = pageControlTintColor
         pageControl.currentPageIndicatorTintColor = currentPageControlColor
@@ -200,23 +223,29 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
         self.addSubview(pageControl)
         
         //设置定时器
-        if imageArray.count > 1{
+        if imageCount > 1{
             timer = NSTimer.scheduledTimerWithTimeInterval(TimeInterval, target: self, selector: #selector(self.timerAction), userInfo: nil, repeats: true)
         }
     }
     
     //设置图片
     private func setScrollViewOfImage(){
-        currentImageView.image = imageArray[indexOfCurrentImage]
-        lastImageView.image = imageArray[getLastImageIndex(indexOfCurrentImage: indexOfCurrentImage)]
-        nextImageView.image = imageArray[getNextImageIndex(indexOfCurrentImage: indexOfCurrentImage)]
+        if imageCount > 0 {
+            currentImageView.imageFromURL(imageArray[indexOfCurrentImage], placeholder: placeholder ?? UIImage())
+            lastImageView.imageFromURL(imageArray[getLastImageIndex(indexOfCurrentImage: indexOfCurrentImage)], placeholder: placeholder ?? UIImage())
+            nextImageView.imageFromURL(imageArray[getNextImageIndex(indexOfCurrentImage: indexOfCurrentImage)], placeholder: placeholder ?? UIImage())
+        }else{
+            currentImageView.imageFromURL("", placeholder: placeholder ?? UIImage())
+//            lastImageView.imageFromURL(imageArray[getLastImageIndex(indexOfCurrentImage: indexOfCurrentImage)], placeholder: placeholder ?? UIImage())
+//            nextImageView.imageFromURL(imageArray[getNextImageIndex(indexOfCurrentImage: indexOfCurrentImage)], placeholder: placeholder ?? UIImage())
+        }
     }
     
     //得到上一张图片的索引
     private func getLastImageIndex(indexOfCurrentImage index: Int) -> Int{
         let tempIndex = index - 1
         if tempIndex == -1{
-            return imageArray.count - 1
+            return imageCount - 1
         }else{
             return tempIndex
         }
@@ -225,7 +254,7 @@ public class CycleScrollView: UIView,UIScrollViewDelegate {
     //得到下一张图片的索引
     private func getNextImageIndex(indexOfCurrentImage index: Int) -> Int{
         let tempIndex = index + 1
-        return tempIndex < imageArray.count ? tempIndex : 0
+        return tempIndex < imageCount ? tempIndex : 0
     }
     
     //事件触发方法
