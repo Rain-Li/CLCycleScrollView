@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CLCycleScrollView'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = '自定义轮播图效果'
 
 # This description is used to generate tags and improve search results.
@@ -32,10 +32,10 @@ Pod::Spec.new do |s|
 
   s.source_files = 'CLCycleScrollView/Classes/**/*'
   
-  s.resource_bundles = {
-    'CLCycleScrollView' => ['Pod/Assets/*.png']
-  }
-  s.dependency 'AFImageHelper', '~> 3.0.2'
+#s.resource_bundles = {
+#  'CLCycleScrollView' => ['Pod/Assets/*.png']
+# }
+# s.dependency 'AFImageHelper', '~> 3.0.2'
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
