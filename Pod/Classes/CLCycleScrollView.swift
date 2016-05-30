@@ -15,11 +15,11 @@ public enum UIPageControlMode : Int {
     case Right
 }
 
-public protocol CycleScrollViewDelegate{
+public protocol CLCycleScrollViewDelegate{
     func clickCurrentImage(currentIndex: Int)
 }
 
-public class CycleScrollView: UIView,UIScrollViewDelegate {
+public class CLCycleScrollView: UIView,UIScrollViewDelegate {
 
     //MARK:定义属性
     //穿件scrollView

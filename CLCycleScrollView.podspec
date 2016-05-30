@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "CLCycleScrollView"
-  s.version          = "0.0.9"
+  s.version          = "0.0.10"
   s.summary          = "自定义轮播图效果"
 
 # This description is used to generate tags and improve search results.
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/Rain-Li/CLCycleScrollView"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
-  s.author           = { "Rain" => "lfqyu@outlook.com" }
+  s.author           = { "Rain" => "lfqysw@gmail.com" }
   s.source           = { :git => "https://github.com/Rain-Li/CLCycleScrollView.git", :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
@@ -32,7 +32,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Pod/Classes/*'
   s.resource_bundles = {
-    'CustomLibrary' => ['Pod/Assets/*.png']
+    'CLCycleScrollView' => ['Pod/Assets/*.png']
   }
   s.dependency 'AFImageHelper', '~> 3.0.2'
   # s.public_header_files = 'Pod/Classes/*'
