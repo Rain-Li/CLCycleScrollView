@@ -37,7 +37,7 @@ public class CLCycleScrollView: UIView,UIScrollViewDelegate {
     //设置pageControl对齐方式(默认居中)
     public var pageControlMode:UIPageControlMode = .Center
     
-    public var delegate: CycleScrollViewDelegate!
+    public var delegate: CLCycleScrollViewDelegate!
     
     var isShowPlaceholder: Bool = false
     
